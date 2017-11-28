@@ -13,17 +13,7 @@ namespace SimplCommerce.WebHost.Extensions
     {
         public static IApplicationBuilder UseCustomizedIdentity(this IApplicationBuilder app)
         {
-            app.UseIdentity()
-                .UseGoogleAuthentication(new GoogleOptions
-                {
-                    ClientId = "583825788849-8g42lum4trd5g3319go0iqt6pn30gqlq.apps.googleusercontent.com",
-                    ClientSecret = "X8xIiuNEUjEYfiEfiNrWOfI4"
-                })
-                .UseFacebookAuthentication(new FacebookOptions
-                {
-                    AppId = "1716532045292977",
-                    AppSecret = "dfece01ae919b7b8af23f962a1f87f95"
-                });
+            app.UseAuthentication();
             return app;
         }
 
@@ -89,11 +79,13 @@ namespace SimplCommerce.WebHost.Extensions
                 new CultureInfo("ru-RU"),
                 new CultureInfo("ar-TN"),
                 new CultureInfo("ko-KR"),
-                new CultureInfo("tr-TR")
+                new CultureInfo("tr-TR"),
+                new CultureInfo("es-ES"),
+                new CultureInfo("zh-CN")
             };
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("vi-VN", "vi-VN"),
+                DefaultRequestCulture = new RequestCulture("en-US", "en-US"),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });

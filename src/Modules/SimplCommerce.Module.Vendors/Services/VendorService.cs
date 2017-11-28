@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using SimplCommerce.Infrastructure.Data;
 using SimplCommerce.Module.Core.Models;
 using SimplCommerce.Module.Core.Services;
@@ -24,10 +25,10 @@ namespace SimplCommerce.Module.Vendors.Services
             {
                 vendor.SeoTitle = _entityService.ToSafeSlug(vendor.SeoTitle, vendor.Id, VendorEntityTypeId);
                 _vendorRepository.Add(vendor);
-                _vendorRepository.SaveChange();
+                _vendorRepository.SaveChanges();
 
                 _entityService.Add(vendor.Name, vendor.SeoTitle, vendor.Id, VendorEntityTypeId);
-                _vendorRepository.SaveChange();
+                _vendorRepository.SaveChanges();
 
                 transaction.Commit();
             }
@@ -37,20 +38,20 @@ namespace SimplCommerce.Module.Vendors.Services
         {
             vendor.SeoTitle = _entityService.ToSafeSlug(vendor.SeoTitle, vendor.Id, VendorEntityTypeId);
             _entityService.Update(vendor.Name, vendor.SeoTitle, vendor.Id, VendorEntityTypeId);
-            _vendorRepository.SaveChange();
+            _vendorRepository.SaveChanges();
         }
 
-        public void Delete(long id)
+        public async Task Delete(long id)
         {
             var vendor = _vendorRepository.Query().First(x => x.Id == id);
-            Delete(vendor);
+            await Delete(vendor);
         }
 
-        public void Delete(Vendor vendor)
+        public async Task Delete(Vendor vendor)
         {
             vendor.IsDeleted = true;
-            _entityService.Remove(vendor.Id, VendorEntityTypeId);
-            _vendorRepository.SaveChange();
+            await _entityService.Remove(vendor.Id, VendorEntityTypeId);
+            _vendorRepository.SaveChanges();
         }
     }
 }

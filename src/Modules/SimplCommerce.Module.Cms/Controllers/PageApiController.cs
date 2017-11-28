@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SimplCommerce.Infrastructure.Data;
 using SimplCommerce.Module.Cms.Models;
 using SimplCommerce.Module.Cms.Services;
@@ -23,22 +25,32 @@ namespace SimplCommerce.Module.Cms.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var pageList = _pageRepository.Query().Where(x => !x.IsDeleted).ToList();
+            var pageList = await _pageRepository.Query()
+                .Where(x => !x.IsDeleted)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.SeoTitle,
+                    x.CreatedOn,
+                    x.IsPublished
+                })
+                .ToListAsync();
 
             return Json(pageList);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            var page = _pageRepository.Query().FirstOrDefault(x => x.Id == id);
+            var page = await _pageRepository.Query().FirstOrDefaultAsync(x => x.Id == id);
             var model = new PageForm
             {
                 Id = page.Id,
                 Name = page.Name,
-                SeoTitle = page.SeoTitle,
+                Slug = page.SeoTitle,
                 Body = page.Body,
                 IsPublished = page.IsPublished
             };
@@ -47,57 +59,59 @@ namespace SimplCommerce.Module.Cms.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] PageForm model)
+        public async Task<IActionResult> Post([FromBody] PageForm model)
         {
             if (ModelState.IsValid)
             {
                 var page = new Page
                 {
                     Name = model.Name,
-                    SeoTitle = model.SeoTitle,
+                    SeoTitle = model.Slug,
                     Body = model.Body,
                     IsPublished = model.IsPublished
                 };
 
-                _pageService.Create(page);
-
-                return Ok();
+                await _pageService.Create(page);
+                return CreatedAtAction(nameof(Get), new { id = page.Id }, null);
             }
-            return new BadRequestObjectResult(ModelState);
+            return BadRequest(ModelState);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] PageForm model)
+        public async Task<IActionResult> Put(long id, [FromBody] PageForm model)
         {
             if (ModelState.IsValid)
             {
-                var page = _pageRepository.Query().FirstOrDefault(x => x.Id == id);
+                var page = await _pageRepository.Query().FirstOrDefaultAsync(x => x.Id == id);
+                if(page == null)
+                {
+                    return NotFound();
+                }
+
                 page.Name = model.Name;
-                page.SeoTitle = model.SeoTitle;
+                page.SeoTitle = model.Slug;
                 page.Body = model.Body;
                 page.IsPublished = model.IsPublished;
                 page.UpdatedOn = DateTimeOffset.Now;
 
-                _pageService.Update(page);
-
-                return Ok();
+                await _pageService.Update(page);
+                return Accepted();
             }
 
-            return new BadRequestObjectResult(ModelState);
+            return BadRequest(ModelState);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            var page = _pageRepository.Query().FirstOrDefault(x => x.Id == id);
+            var page = await _pageRepository.Query().FirstOrDefaultAsync(x => x.Id == id);
             if (page == null)
             {
-                return new NotFoundResult();
+                return NotFound();
             }
 
-            _pageService.Delete(page);
-
-            return Ok();
+            await _pageService.Delete(page);
+            return NoContent();
         }
     }
 }

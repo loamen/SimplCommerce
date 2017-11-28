@@ -1,4 +1,5 @@
-﻿using SimplCommerce.Infrastructure.Data;
+﻿using System.Threading.Tasks;
+using SimplCommerce.Infrastructure.Data;
 using SimplCommerce.Module.Catalog.Models;
 using SimplCommerce.Module.Core.Services;
 
@@ -23,10 +24,10 @@ namespace SimplCommerce.Module.Catalog.Services
             {
                 product.SeoTitle = _entityService.ToSafeSlug(product.SeoTitle, product.Id, ProductEntityTypeId);
                 _productRepository.Add(product);
-                _productRepository.SaveChange();
+                _productRepository.SaveChanges();
 
                 _entityService.Add(product.Name, product.SeoTitle, product.Id, ProductEntityTypeId);
-                _productRepository.SaveChange();
+                _productRepository.SaveChanges();
 
                 transaction.Commit();
             }
@@ -54,14 +55,14 @@ namespace SimplCommerce.Module.Catalog.Services
                     _entityService.Remove(product.Id, ProductEntityTypeId);
                 }
             }
-            _productRepository.SaveChange();
+            _productRepository.SaveChanges();
         }
 
-        public void Delete(Product product)
+        public async Task Delete(Product product)
         {
             product.IsDeleted = true;
-            _entityService.Remove(product.Id, ProductEntityTypeId);
-            _productRepository.SaveChange();
+            await _entityService.Remove(product.Id, ProductEntityTypeId);
+            _productRepository.SaveChanges();
         }
     }
 }

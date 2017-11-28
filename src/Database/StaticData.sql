@@ -2,6 +2,13 @@
 INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (1, N'Catalog.ProductPageSize', N'10')
 INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (2, N'Global.AssetVersion', N'1.0')
 INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (3, N'News.PageSize', N'10')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (4, N'GoogleAppKey', N'AIzaSyBmsQV2FUo6g52R1kovLyfvaYm4FryNs4g')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (5, N'SmtpServer', N'smtp.gmail.com')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (6, N'SmtpPort', N'587')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (7, N'SmtpUsername', N'')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (8, N'SmtpPassword', N'')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (9, N'Theme', N'Generic')
+INSERT [dbo].[Core_AppSetting] ([Id], [Key], [Value]) VALUES (10, N'Tax_IsProductPriceIncludedTax', N'true')
 SET IDENTITY_INSERT [dbo].[Core_AppSetting] OFF
 GO
 
@@ -22,18 +29,18 @@ INSERT [dbo].[Core_UserRole] ([UserId], [RoleId]) VALUES (1, 1)
 GO
 
 SET IDENTITY_INSERT [dbo].[Core_EntityType] ON 
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (1, N'Category', N'Category', N'CategoryDetail')
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (2, N'Brand', N'Brand', N'BrandDetail')
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (3, N'Product', N'Product', N'ProductDetail')
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (4, N'Page', N'Page', N'PageDetail')
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (5, N'Vendor', N'Vendor', N'VendorDetail')
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (6, N'NewsCategory', N'NewsCategory', N'NewsCategoryDetail')
-INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction]) VALUES (7, N'NewsItem', N'NewsItem', N'NewsItemDetail')
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (1, N'Category', N'Category', N'CategoryDetail', 1)
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (2, N'Brand', N'Brand', N'BrandDetail', 1)
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (3, N'Product', N'Product', N'ProductDetail', 0)
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (4, N'Page', N'Page', N'PageDetail', 1)
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (5, N'Vendor', N'Vendor', N'VendorDetail', 0)
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (6, N'NewsCategory', N'NewsCategory', N'NewsCategoryDetail', 1)
+INSERT [dbo].[Core_EntityType] ([Id], [Name], [RoutingController], [RoutingAction], [IsMenuable]) VALUES (7, N'NewsItem', N'NewsItem', N'NewsItemDetail', 0)
 SET IDENTITY_INSERT [dbo].[Core_EntityType] OFF
 GO
 
 SET IDENTITY_INSERT [dbo].[ActivityLog_ActivityType] ON 
-INSERT [dbo].[ActivityLog_ActivityType] ([Id], [Name]) VALUES (1, N'ProductView')
+INSERT [dbo].[ActivityLog_ActivityType] ([Id], [Name]) VALUES (1, N'EntityView')
 SET IDENTITY_INSERT [dbo].[ActivityLog_ActivityType] OFF
 GO
 
@@ -41,6 +48,7 @@ SET IDENTITY_INSERT [dbo].[Core_Widget] ON
 INSERT [dbo].[Core_Widget] ([Id], [Code], [CreateUrl], [CreatedOn], [EditUrl], [IsPublished], [Name], [ViewComponentName]) VALUES (1, N'CarouselWidget', N'widget-carousel-create', CAST(N'2016-06-19 00:00:00.0000000' AS DateTime2), N'widget-carousel-edit', 1, N'Carousel Widget', N'CarouselWidget')
 INSERT [dbo].[Core_Widget] ([Id], [Code], [CreateUrl], [CreatedOn], [EditUrl], [IsPublished], [Name], [ViewComponentName]) VALUES (2, N'HtmlWidget', N'widget-html-create', CAST(N'2016-06-24 00:00:00.0000000' AS DateTime2), N'widget-html-edit', 1, N'Html Widget', N'HtmlWidget')
 INSERT [dbo].[Core_Widget] ([Id], [Code], [CreateUrl], [CreatedOn], [EditUrl], [IsPublished], [Name], [ViewComponentName]) VALUES (3, N'ProductWidget', N'widget-product-create', CAST(N'2016-07-08 00:00:00.0000000' AS DateTime2), N'widget-product-edit', 1, N'Product Widget', N'ProductWidget')
+INSERT [dbo].[Core_Widget] ([Id], [Code], [CreateUrl], [CreatedOn], [EditUrl], [IsPublished], [Name], [ViewComponentName]) VALUES (4, N'CategoryWidget', N'widget-category-create', CAST(N'2016-07-08 00:00:00.0000000' AS DateTime2), N'widget-category-edit', 1, N'Category Widget', N'CategoryWidget')
 SET IDENTITY_INSERT [dbo].[Core_Widget] OFF
 GO
 
@@ -50,83 +58,466 @@ INSERT [dbo].[Core_WidgetZone] ([Id], [Description], [Name]) VALUES (2, NULL, N'
 INSERT [dbo].[Core_WidgetZone] ([Id], [Description], [Name]) VALUES (3, NULL, N'Home After Main Content')
 SET IDENTITY_INSERT [dbo].[Core_WidgetZone] OFF
 
+SET IDENTITY_INSERT [dbo].[Cms_Menu] ON
+INSERT [dbo].[Cms_Menu] ([Id], [IsPublished], [IsSystem], [Name]) VALUES (1, 1, 1, N'Customer services')
+INSERT [dbo].[Cms_Menu] ([Id], [IsPublished], [IsSystem], [Name]) VALUES (2, 1, 1, N'Information')
+SET IDENTITY_INSERT [dbo].[Cms_Menu] OFF
+GO
+
 SET IDENTITY_INSERT [dbo].[Catalog_ProductOption] ON 
 INSERT [dbo].[Catalog_ProductOption] ([Id], [Name]) VALUES (1, N'Color')
 INSERT [dbo].[Catalog_ProductOption] ([Id], [Name]) VALUES (2, N'Size')
 SET IDENTITY_INSERT [dbo].[Catalog_ProductOption] OFF
 GO
 
-SET IDENTITY_INSERT Core_Country ON 
-INSERT INTO Core_Country (Id, Name) VALUES (1, N'Việt Nam')
-SET IDENTITY_INSERT Core_Country OFF 
+SET IDENTITY_INSERT [dbo].[Core_Country] ON 
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (1, N'Afghanistan', N'AF', N'AFG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (2, N'Albania', N'AL', N'ALB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (3, N'Algeria', N'DZ', N'DZA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (4, N'American Samoa', N'AS', N'ASM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (5, N'Andorra', N'AD', N'AND', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (6, N'Angola', N'AO', N'AGO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (7, N'Anguilla', N'AI', N'AIA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (8, N'Antarctica', N'AQ', N'ATA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (9, N'Antigua &amp; Barbuda', N'AG', N'ATG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (10, N'Argentina', N'AR', N'ARG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (11, N'Armenia', N'AM', N'ARM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (12, N'Aruba', N'AW', N'ABW', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (13, N'Australia', N'AU', N'AUS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (14, N'Austria', N'AT', N'AUT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (15, N'Azerbaijan', N'AZ', N'AZE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (16, N'Bahamas', N'BS', N'BHS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (17, N'Bahrain', N'BH', N'BHR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (18, N'Bangladesh', N'BD', N'BGD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (19, N'Barbados', N'BB', N'BRB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (20, N'Belarus', N'BY', N'BLR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (21, N'Belgium', N'BE', N'BEL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (22, N'Belize', N'BZ', N'BLZ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (23, N'Benin', N'BJ', N'BEN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (24, N'Bermuda', N'BM', N'BMU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (25, N'Bhutan', N'BT', N'BTN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (26, N'Bolivia', N'BO', N'BOL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (27, N'Bosnia &amp; Herzegovina', N'BA', N'BIH', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (28, N'Botswana', N'BW', N'BWA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (29, N'Bouvet Island', N'BV', N'BVT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (30, N'Brazil', N'BR', N'BRA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (31, N'British Indian Ocean Territory', N'IO', N'IOT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (32, N'British Virgin Islands', N'VG', N'VGB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (33, N'Brunei', N'BN', N'BRN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (34, N'Bulgaria', N'BG', N'BGR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (35, N'Burkina Faso', N'BF', N'BFA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (36, N'Burundi', N'BI', N'BDI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (37, N'Cambodia', N'KH', N'KHM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (38, N'Cameroon', N'CM', N'CMR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (39, N'Canada', N'CA', N'CAN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (40, N'Cape Verde', N'CV', N'CPV', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (41, N'Cayman Islands', N'KY', N'CYM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (42, N'Central African Republic', N'CF', N'CAF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (43, N'Chad', N'TD', N'TCD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (44, N'Chile', N'CL', N'CHL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (45, N'China', N'CN', N'CHN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (46, N'Christmas Island', N'CX', N'CXR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (47, N'Cocos (Keeling) Islands', N'CC', N'CCK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (48, N'Colombia', N'CO', N'COL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (49, N'Comoros', N'KM', N'COM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (50, N'Congo - Brazzaville', N'CG', N'COG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (51, N'Congo - Kinshasa', N'CD', N'COD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (52, N'Cook Islands', N'CK', N'COK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (53, N'Costa Rica', N'CR', N'CRI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (54, N'Croatia', N'HR', N'HRV', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (55, N'Cuba', N'CU', N'CUB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (56, N'Cyprus', N'CY', N'CYP', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (57, N'Czech Republic', N'CZ', N'CZE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (58, N'Côte d’Ivoire', N'CI', N'CIV', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (59, N'Denmark', N'DK', N'DNK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (60, N'Djibouti', N'DJ', N'DJI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (61, N'Dominica', N'DM', N'DMA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (62, N'Dominican Republic', N'DO', N'DOM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (63, N'Ecuador', N'EC', N'ECU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (64, N'Egypt', N'EG', N'EGY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (65, N'El Salvador', N'SV', N'SLV', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (66, N'Equatorial Guinea', N'GQ', N'GNQ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (67, N'Eritrea', N'ER', N'ERI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (68, N'Estonia', N'EE', N'EST', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (69, N'Ethiopia', N'ET', N'ETH', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (70, N'Falkland Islands', N'FK', N'FLK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (71, N'Faroe Islands', N'FO', N'FRO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (72, N'Fiji', N'FJ', N'FJI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (73, N'Finland', N'FI', N'FIN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (74, N'France', N'FR', N'FRA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (75, N'French Guiana', N'GF', N'GUF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (76, N'French Polynesia', N'PF', N'PYF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (77, N'French Southern Territories', N'TF', N'ATF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (78, N'Gabon', N'GA', N'GAB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (79, N'Gambia', N'GM', N'GMB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (80, N'Georgia', N'GE', N'GEO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (81, N'Germany', N'DE', N'DEU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (82, N'Ghana', N'GH', N'GHA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (83, N'Gibraltar', N'GI', N'GIB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (84, N'Greece', N'GR', N'GRC', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (85, N'Greenland', N'GL', N'GRL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (86, N'Grenada', N'GD', N'GRD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (87, N'Guadeloupe', N'GP', N'GLP', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (88, N'Guam', N'GU', N'GUM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (89, N'Guatemala', N'GT', N'GTM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (90, N'Guernsey', N'GG', N'GGY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (91, N'Guinea', N'GN', N'GIN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (92, N'Guinea-Bissau', N'GW', N'GNB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (93, N'Guyana', N'GY', N'GUY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (94, N'Haiti', N'HT', N'HTI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (95, N'Heard &amp; McDonald Islands', N'HM', N'HMD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (96, N'Honduras', N'HN', N'HND', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (97, N'Hong Kong SAR China', N'HK', N'HKG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (98, N'Hungary', N'HU', N'HUN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (99, N'Iceland', N'IS', N'ISL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (100, N'India', N'IN', N'IND', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (101, N'Indonesia', N'ID', N'IDN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (102, N'Iran', N'IR', N'IRN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (103, N'Iraq', N'IQ', N'IRQ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (104, N'Ireland', N'IE', N'IRL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (105, N'Isle of Man', N'IM', N'IMN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (106, N'Israel', N'IL', N'ISR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (107, N'Italy', N'IT', N'ITA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (108, N'Jamaica', N'JM', N'JAM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (109, N'Japan', N'JP', N'JPN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (110, N'Jersey', N'JE', N'JEY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (111, N'Jordan', N'JO', N'JOR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (112, N'Kazakhstan', N'KZ', N'KAZ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (113, N'Kenya', N'KE', N'KEN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (114, N'Kiribati', N'KI', N'KIR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (115, N'Kuwait', N'KW', N'KWT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (116, N'Kyrgyzstan', N'KG', N'KGZ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (117, N'Laos', N'LA', N'LAO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (118, N'Latvia', N'LV', N'LVA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (119, N'Lebanon', N'LB', N'LBN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (120, N'Lesotho', N'LS', N'LSO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (121, N'Liberia', N'LR', N'LBR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (122, N'Libya', N'LY', N'LBY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (123, N'Liechtenstein', N'LI', N'LIE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (124, N'Lithuania', N'LT', N'LTU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (125, N'Luxembourg', N'LU', N'LUX', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (126, N'Macau SAR China', N'MO', N'MAC', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (127, N'Macedonia', N'MK', N'MKD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (128, N'Madagascar', N'MG', N'MDG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (129, N'Malawi', N'MW', N'MWI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (130, N'Malaysia', N'MY', N'MYS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (131, N'Maldives', N'MV', N'MDV', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (132, N'Mali', N'ML', N'MLI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (133, N'Malta', N'MT', N'MLT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (134, N'Marshall Islands', N'MH', N'MHL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (135, N'Martinique', N'MQ', N'MTQ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (136, N'Mauritania', N'MR', N'MRT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (137, N'Mauritius', N'MU', N'MUS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (138, N'Mayotte', N'YT', N'MYT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (139, N'Mexico', N'MX', N'MEX', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (140, N'Micronesia', N'FM', N'FSM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (141, N'Moldova', N'MD', N'MDA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (142, N'Monaco', N'MC', N'MCO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (143, N'Mongolia', N'MN', N'MNG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (144, N'Montenegro', N'ME', N'MNE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (145, N'Montserrat', N'MS', N'MSR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (146, N'Morocco', N'MA', N'MAR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (147, N'Mozambique', N'MZ', N'MOZ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (148, N'Myanmar (Burma)', N'MM', N'MMR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (149, N'Namibia', N'NA', N'NAM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (150, N'Nauru', N'NR', N'NRU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (151, N'Nepal', N'NP', N'NPL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (152, N'Netherlands', N'NL', N'NLD', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (153, N'New Caledonia', N'NC', N'NCL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (154, N'New Zealand', N'NZ', N'NZL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (155, N'Nicaragua', N'NI', N'NIC', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (156, N'Niger', N'NE', N'NER', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (157, N'Nigeria', N'NG', N'NGA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (158, N'Niue', N'NU', N'NIU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (159, N'Norfolk Island', N'NF', N'NFK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (160, N'North Korea', N'KP', N'PRK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (161, N'Northern Mariana Islands', N'MP', N'MNP', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (162, N'Norway', N'NO', N'NOR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (163, N'Oman', N'OM', N'OMN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (164, N'Pakistan', N'PK', N'PAK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (165, N'Palau', N'PW', N'PLW', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (166, N'Palestinian Territories', N'PS', N'PSE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (167, N'Panama', N'PA', N'PAN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (168, N'Papua New Guinea', N'PG', N'PNG', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (169, N'Paraguay', N'PY', N'PRY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (170, N'Peru', N'PE', N'PER', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (171, N'Philippines', N'PH', N'PHL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (172, N'Pitcairn Islands', N'PN', N'PCN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (173, N'Poland', N'PL', N'POL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (174, N'Portugal', N'PT', N'PRT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (175, N'Qatar', N'QA', N'QAT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (176, N'Romania', N'RO', N'ROU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (177, N'Russia', N'RU', N'RUS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (178, N'Rwanda', N'RW', N'RWA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (179, N'Réunion', N'RE', N'REU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (180, N'Samoa', N'WS', N'WSM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (181, N'San Marino', N'SM', N'SMR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (182, N'Saudi Arabia', N'SA', N'SAU', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (183, N'Senegal', N'SN', N'SEN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (184, N'Serbia', N'RS', N'SRB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (185, N'Seychelles', N'SC', N'SYC', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (186, N'Sierra Leone', N'SL', N'SLE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (187, N'Singapore', N'SG', N'SGP', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (188, N'Slovakia', N'SK', N'SVK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (189, N'Slovenia', N'SI', N'SVN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (190, N'Solomon Islands', N'SB', N'SLB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (191, N'Somalia', N'SO', N'SOM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (192, N'South Africa', N'ZA', N'ZAF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (193, N'South Georgia &amp; South Sandwich Islands', N'GS', N'SGS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (194, N'South Korea', N'KR', N'KOR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (195, N'Spain', N'ES', N'ESP', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (196, N'Sri Lanka', N'LK', N'LKA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (197, N'St. Barthélemy', N'BL', N'BLM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (198, N'St. Helena', N'SH', N'SHN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (199, N'St. Kitts &amp; Nevis', N'KN', N'KNA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (200, N'St. Lucia', N'LC', N'LCA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (201, N'St. Martin', N'MF', N'MAF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (202, N'St. Pierre &amp; Miquelon', N'PM', N'SPM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (203, N'St. Vincent &amp; Grenadines', N'VC', N'VCT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (204, N'Sudan', N'SD', N'SDN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (205, N'Suriname', N'SR', N'SUR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (206, N'Svalbard &amp; Jan Mayen', N'SJ', N'SJM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (207, N'Swaziland', N'SZ', N'SWZ', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (208, N'Sweden', N'SE', N'SWE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (209, N'Switzerland', N'CH', N'CHE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (210, N'Syria', N'SY', N'SYR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (211, N'São Tomé &amp; Príncipe', N'ST', N'STP', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (212, N'Taiwan', N'TW', N'TWN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (213, N'Tajikistan', N'TJ', N'TJK', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (214, N'Tanzania', N'TZ', N'TZA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (215, N'Thailand', N'TH', N'THA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (216, N'Timor-Leste', N'TL', N'TLS', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (217, N'Togo', N'TG', N'TGO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (218, N'Tokelau', N'TK', N'TKL', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (219, N'Tonga', N'TO', N'TON', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (220, N'Trinidad &amp; Tobago', N'TT', N'TTO', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (221, N'Tunisia', N'TN', N'TUN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (222, N'Turkey', N'TR', N'TUR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (223, N'Turkmenistan', N'TM', N'TKM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (224, N'Turks &amp; Caicos Islands', N'TC', N'TCA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (225, N'Tuvalu', N'TV', N'TUV', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (226, N'U.S. Outlying Islands', N'UM', N'UMI', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (227, N'U.S. Virgin Islands', N'VI', N'VIR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (228, N'Uganda', N'UG', N'UGA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (229, N'Ukraine', N'UA', N'UKR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (230, N'United Arab Emirates', N'AE', N'ARE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (231, N'United Kingdom', N'GB', N'GBR', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (232, N'United States', N'US', N'USA', 1, 1)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (233, N'Uruguay', N'UY', N'URY', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (234, N'Uzbekistan', N'UZ', N'UZB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (235, N'Vanuatu', N'VU', N'VUT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (236, N'Vatican City', N'VA', N'VAT', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (237, N'Venezuela', N'VE', N'VEN', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (238, N'Vietnam', N'VN', N'VNM', 1, 1)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (239, N'Wallis &amp; Futuna', N'WF', N'WLF', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (240, N'Western Sahara', N'EH', N'ESH', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (241, N'Yemen', N'YE', N'YEM', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (242, N'Zambia', N'ZM', N'ZMB', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (243, N'Zimbabwe', N'ZW', N'ZWE', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (244, N'Åland Islands', N'AX', N'ALA', 0, 0)
+INSERT [dbo].[Core_Country] ([Id], [Name], [Code2], [Code3], [IsBillingEnabled], [IsShippingEnabled]) VALUES (245, N'Netherlands Antilles', N'AN', N'ANT', 0, 0)
+SET IDENTITY_INSERT [dbo].[Core_Country] OFF
 GO
 
 SET IDENTITY_INSERT Core_StateOrProvince ON 
-INSERT INTO Core_StateOrProvince (Id, CountryId, Name, [Type]) VALUES
-			(1, 1, N'Hà Nội', N'Thành Phố'),
-			(2, 1, N'Hà Giang', N'Tỉnh'),
-			(4, 1, N'Cao Bằng', N'Tỉnh'),
-			(6, 1, N'Bắc Kạn', N'Tỉnh'),
-			(8, 1, N'Tuyên Quang', N'Tỉnh'),
-			(10, 1, N'Lào Cai', N'Tỉnh'),
-			(11, 1, N'Điện Biên', N'Tỉnh'),
-			(12, 1, N'Lai Châu', N'Tỉnh'),
-			(14, 1, N'Sơn La', N'Tỉnh'),
-			(15, 1, N'Yên Bái', N'Tỉnh'),
-			(17, 1, N'Hòa Bình', N'Tỉnh'),
-			(19, 1, N'Thái Nguyên', N'Tỉnh'),
-			(20, 1, N'Lạng Sơn', N'Tỉnh'),
-			(22, 1, N'Quảng Ninh', N'Tỉnh'),
-			(24, 1, N'Bắc Giang', N'Tỉnh'),
-			(25, 1, N'Phú Thọ', N'Tỉnh'),
-			(26, 1, N'Vĩnh Phúc', N'Tỉnh'),
-			(27, 1, N'Bắc Ninh', N'Tỉnh'),
-			(30, 1, N'Hải Dương', N'Tỉnh'),
-			(31, 1, N'Hải Phòng', N'Thành Phố'),
-			(33, 1, N'Hưng Yên', N'Tỉnh'),
-			(34, 1, N'Thái Bình', N'Tỉnh'),
-			(35, 1, N'Hà Nam', N'Tỉnh'),
-			(36, 1, N'Nam Định', N'Tỉnh'),
-			(37, 1, N'Ninh Bình', N'Tỉnh'),
-			(38, 1, N'Thanh Hóa', N'Tỉnh'),
-			(40, 1, N'Nghệ An', N'Tỉnh'),
-			(42, 1, N'Hà Tĩnh', N'Tỉnh'),
-			(44, 1, N'Quảng Bình', N'Tỉnh'),
-			(45, 1, N'Quảng Trị', N'Tỉnh'),
-			(46, 1, N'Thừa Thiên Huế', N'Tỉnh'),
-			(48, 1, N'Đà Nẵng', N'Thành Phố'),
-			(49, 1, N'Quảng Nam', N'Tỉnh'),
-			(51, 1, N'Quảng Ngãi', N'Tỉnh'),
-			(52, 1, N'Bình Định', N'Tỉnh'),
-			(54, 1, N'Phú Yên', N'Tỉnh'),
-			(56, 1, N'Khánh Hòa', N'Tỉnh'),
-			(58, 1, N'Ninh Thuận', N'Tỉnh'),
-			(60, 1, N'Bình Thuận', N'Tỉnh'),
-			(62, 1, N'Kon Tum', N'Tỉnh'),
-			(64, 1, N'Gia Lai', N'Tỉnh'),
-			(66, 1, N'Đắk Lắk', N'Tỉnh'),
-			(67, 1, N'Đắk Nông', N'Tỉnh'),
-			(68, 1, N'Lâm Đồng', N'Tỉnh'),
-			(70, 1, N'Bình Phước', N'Tỉnh'),
-			(72, 1, N'Tây Ninh', N'Tỉnh'),
-			(74, 1, N'Bình Dương', N'Tỉnh'),
-			(75, 1, N'Đồng Nai', N'Tỉnh'),
-			(77, 1, N'Bà Rịa - Vũng Tàu', N'Tỉnh'),
-			(79, 1, N'Hồ Chí Minh', N'Thành Phố'),
-			(80, 1, N'Long An', N'Tỉnh'),
-			(82, 1, N'Tiền Giang', N'Tỉnh'),
-			(83, 1, N'Bến Tre', N'Tỉnh'),
-			(84, 1, N'Trà Vinh', N'Tỉnh'),
-			(86, 1, N'Vĩnh Long', N'Tỉnh'),
-			(87, 1, N'Đồng Tháp', N'Tỉnh'),
-			(89, 1, N'An Giang', N'Tỉnh'),
-			(91, 1, N'Kiên Giang', N'Tỉnh'),
-			(92, 1, N'Cần Thơ', N'Thành Phố'),
-			(93, 1, N'Hậu Giang', N'Tỉnh'),
-			(94, 1, N'Sóc Trăng', N'Tỉnh'),
-			(95, 1, N'Bạc Liêu', N'Tỉnh'),
-			(96, 1, N'Cà Mau', N'Tỉnh');
+INSERT INTO Core_StateOrProvince ([Id], [CountryId], [Name], [Type]) VALUES
+(1, 238, N'Hà Nội', N'Thành Phố'),
+(2, 238, N'Hà Giang', N'Tỉnh'),
+(4, 238, N'Cao Bằng', N'Tỉnh'),
+(6, 238, N'Bắc Kạn', N'Tỉnh'),
+(8, 238, N'Tuyên Quang', N'Tỉnh'),
+(10, 238, N'Lào Cai', N'Tỉnh'),
+(11, 238, N'Điện Biên', N'Tỉnh'),
+(12, 238, N'Lai Châu', N'Tỉnh'),
+(14, 238, N'Sơn La', N'Tỉnh'),
+(15, 238, N'Yên Bái', N'Tỉnh'),
+(17, 238, N'Hòa Bình', N'Tỉnh'),
+(19, 238, N'Thái Nguyên', N'Tỉnh'),
+(20, 238, N'Lạng Sơn', N'Tỉnh'),
+(22, 238, N'Quảng Ninh', N'Tỉnh'),
+(24, 238, N'Bắc Giang', N'Tỉnh'),
+(25, 238, N'Phú Thọ', N'Tỉnh'),
+(26, 238, N'Vĩnh Phúc', N'Tỉnh'),
+(27, 238, N'Bắc Ninh', N'Tỉnh'),
+(30, 238, N'Hải Dương', N'Tỉnh'),
+(31, 238, N'Hải Phòng', N'Thành Phố'),
+(33, 238, N'Hưng Yên', N'Tỉnh'),
+(34, 238, N'Thái Bình', N'Tỉnh'),
+(35, 238, N'Hà Nam', N'Tỉnh'),
+(36, 238, N'Nam Định', N'Tỉnh'),
+(37, 238, N'Ninh Bình', N'Tỉnh'),
+(38, 238, N'Thanh Hóa', N'Tỉnh'),
+(40, 238, N'Nghệ An', N'Tỉnh'),
+(42, 238, N'Hà Tĩnh', N'Tỉnh'),
+(44, 238, N'Quảng Bình', N'Tỉnh'),
+(45, 238, N'Quảng Trị', N'Tỉnh'),
+(46, 238, N'Thừa Thiên Huế', N'Tỉnh'),
+(48, 238, N'Đà Nẵng', N'Thành Phố'),
+(49, 238, N'Quảng Nam', N'Tỉnh'),
+(51, 238, N'Quảng Ngãi', N'Tỉnh'),
+(52, 238, N'Bình Định', N'Tỉnh'),
+(54, 238, N'Phú Yên', N'Tỉnh'),
+(56, 238, N'Khánh Hòa', N'Tỉnh'),
+(58, 238, N'Ninh Thuận', N'Tỉnh'),
+(60, 238, N'Bình Thuận', N'Tỉnh'),
+(62, 238, N'Kon Tum', N'Tỉnh'),
+(64, 238, N'Gia Lai', N'Tỉnh'),
+(66, 238, N'Đắk Lắk', N'Tỉnh'),
+(67, 238, N'Đắk Nông', N'Tỉnh'),
+(68, 238, N'Lâm Đồng', N'Tỉnh'),
+(70, 238, N'Bình Phước', N'Tỉnh'),
+(72, 238, N'Tây Ninh', N'Tỉnh'),
+(74, 238, N'Bình Dương', N'Tỉnh'),
+(75, 238, N'Đồng Nai', N'Tỉnh'),
+(77, 238, N'Bà Rịa - Vũng Tàu', N'Tỉnh'),
+(79, 238, N'Hồ Chí Minh', N'Thành Phố'),
+(80, 238, N'Long An', N'Tỉnh'),
+(82, 238, N'Tiền Giang', N'Tỉnh'),
+(83, 238, N'Bến Tre', N'Tỉnh'),
+(84, 238, N'Trà Vinh', N'Tỉnh'),
+(86, 238, N'Vĩnh Long', N'Tỉnh'),
+(87, 238, N'Đồng Tháp', N'Tỉnh'),
+(89, 238, N'An Giang', N'Tỉnh'),
+(91, 238, N'Kiên Giang', N'Tỉnh'),
+(92, 238, N'Cần Thơ', N'Thành Phố'),
+(93, 238, N'Hậu Giang', N'Tỉnh'),
+(94, 238, N'Sóc Trăng', N'Tỉnh'),
+(95, 238, N'Bạc Liêu', N'Tỉnh'),
+(96, 238, N'Cà Mau', N'Tỉnh');
 SET IDENTITY_INSERT Core_StateOrProvince OFF 
+GO
+
+INSERT INTO [Core_StateOrProvince] ([CountryId], [CountryCode], [Code], [Name]) VALUES
+(232, 'US', 'AL', 'Alabama'),
+(232, 'US', 'AK', 'Alaska'),
+(232, 'US', 'AS', 'American Samoa'),
+(232, 'US', 'AZ', 'Arizona'),
+(232, 'US', 'AR', 'Arkansas'),
+(232, 'US', 'AE', 'Armed Forces Africa'),
+(232, 'US', 'AA', 'Armed Forces Americas'),
+(232, 'US', 'AE', 'Armed Forces Canada'),
+(232, 'US', 'AE', 'Armed Forces Europe'),
+(232, 'US', 'AE', 'Armed Forces Middle East'),
+(232, 'US', 'AP', 'Armed Forces Pacific'),
+(232, 'US', 'CA', 'California'),
+(232, 'US', 'CO', 'Colorado'),
+(232, 'US', 'CT', 'Connecticut'),
+(232, 'US', 'DE', 'Delaware'),
+(232, 'US', 'DC', 'District of Columbia'),
+(232, 'US', 'FM', 'Federated States Of Micronesia'),
+(232, 'US', 'FL', 'Florida'),
+(232, 'US', 'GA', 'Georgia'),
+(232, 'US', 'GU', 'Guam'),
+(232, 'US', 'HI', 'Hawaii'),
+(232, 'US', 'ID', 'Idaho'),
+(232, 'US', 'IL', 'Illinois'),
+(232, 'US', 'IN', 'Indiana'),
+(232, 'US', 'IA', 'Iowa'),
+(232, 'US', 'KS', 'Kansas'),
+(232, 'US', 'KY', 'Kentucky'),
+(232, 'US', 'LA', 'Louisiana'),
+(232, 'US', 'ME', 'Maine'),
+(232, 'US', 'MH', 'Marshall Islands'),
+(232, 'US', 'MD', 'Maryland'),
+(232, 'US', 'MA', 'Massachusetts'),
+(232, 'US', 'MI', 'Michigan'),
+(232, 'US', 'MN', 'Minnesota'),
+(232, 'US', 'MS', 'Mississippi'),
+(232, 'US', 'MO', 'Missouri'),
+(232, 'US', 'MT', 'Montana'),
+(232, 'US', 'NE', 'Nebraska'),
+(232, 'US', 'NV', 'Nevada'),
+(232, 'US', 'NH', 'New Hampshire'),
+(232, 'US', 'NJ', 'New Jersey'),
+(232, 'US', 'NM', 'New Mexico'),
+(232, 'US', 'NY', 'New York'),
+(232, 'US', 'NC', 'North Carolina'),
+(232, 'US', 'ND', 'North Dakota'),
+(232, 'US', 'MP', 'Northern Mariana Islands'),
+(232, 'US', 'OH', 'Ohio'),
+(232, 'US', 'OK', 'Oklahoma'),
+(232, 'US', 'OR', 'Oregon'),
+(232, 'US', 'PW', 'Palau'),
+(232, 'US', 'PA', 'Pennsylvania'),
+(232, 'US', 'PR', 'Puerto Rico'),
+(232, 'US', 'RI', 'Rhode Island'),
+(232, 'US', 'SC', 'South Carolina'),
+(232, 'US', 'SD', 'South Dakota'),
+(232, 'US', 'TN', 'Tennessee'),
+(232, 'US', 'TX', 'Texas'),
+(232, 'US', 'UT', 'Utah'),
+(232, 'US', 'VT', 'Vermont'),
+(232, 'US', 'VI', 'Virgin Islands'),
+(232, 'US', 'VA', 'Virginia'),
+(232, 'US', 'WA', 'Washington'),
+(232, 'US', 'WV', 'West Virginia'),
+(232, 'US', 'WI', 'Wisconsin'),
+(232, 'US', 'WY', 'Wyoming'),
+(39, 'CA', 'AB', 'Alberta'),
+(39, 'CA', 'BC', 'British Columbia'),
+(39, 'CA', 'MB', 'Manitoba'),
+(39, 'CA', 'NL', 'Newfoundland and Labrador'),
+(39, 'CA', 'NB', 'New Brunswick'),
+(39, 'CA', 'NS', 'Nova Scotia'),
+(39, 'CA', 'NT', 'Northwest Territories'),
+(39, 'CA', 'NU', 'Nunavut'),
+(39, 'CA', 'ON', 'Ontario'),
+(39, 'CA', 'PE', 'Prince Edward Island'),
+(39, 'CA', 'QC', 'Quebec'),
+(39, 'CA', 'SK', 'Saskatchewan'),
+(39, 'CA', 'YT', 'Yukon Territory'),
+(195, 'ES', 'A Coruсa', 'A Coruña'),
+(195, 'ES', 'Alava', 'Alava'),
+(195, 'ES', 'Albacete', 'Albacete'),
+(195, 'ES', 'Alicante', 'Alicante'),
+(195, 'ES', 'Almeria', 'Almeria'),
+(195, 'ES', 'Asturias', 'Asturias'),
+(195, 'ES', 'Avila', 'Avila'),
+(195, 'ES', 'Badajoz', 'Badajoz'),
+(195, 'ES', 'Baleares', 'Baleares'),
+(195, 'ES', 'Barcelona', 'Barcelona'),
+(195, 'ES', 'Burgos', 'Burgos'),
+(195, 'ES', 'Caceres', 'Caceres'),
+(195, 'ES', 'Cadiz', 'Cadiz'),
+(195, 'ES', 'Cantabria', 'Cantabria'),
+(195, 'ES', 'Castellon', 'Castellon'),
+(195, 'ES', 'Ceuta', 'Ceuta'),
+(195, 'ES', 'Ciudad Real', 'Ciudad Real'),
+(195, 'ES', 'Cordoba', 'Cordoba'),
+(195, 'ES', 'Cuenca', 'Cuenca'),
+(195, 'ES', 'Girona', 'Girona'),
+(195, 'ES', 'Granada', 'Granada'),
+(195, 'ES', 'Guadalajara', 'Guadalajara'),
+(195, 'ES', 'Guipuzcoa', 'Guipuzcoa'),
+(195, 'ES', 'Huelva', 'Huelva'),
+(195, 'ES', 'Huesca', 'Huesca'),
+(195, 'ES', 'Jaen', 'Jaen'),
+(195, 'ES', 'La Rioja', 'La Rioja'),
+(195, 'ES', 'Las Palmas', 'Las Palmas'),
+(195, 'ES', 'Leon', 'Leon'),
+(195, 'ES', 'Lleida', 'Lleida'),
+(195, 'ES', 'Lugo', 'Lugo'),
+(195, 'ES', 'Madrid', 'Madrid'),
+(195, 'ES', 'Malaga', 'Malaga'),
+(195, 'ES', 'Melilla', 'Melilla'),
+(195, 'ES', 'Murcia', 'Murcia'),
+(195, 'ES', 'Navarra', 'Navarra'),
+(195, 'ES', 'Ourense', 'Ourense'),
+(195, 'ES', 'Palencia', 'Palencia'),
+(195, 'ES', 'Pontevedra', 'Pontevedra'),
+(195, 'ES', 'Salamanca', 'Salamanca'),
+(195, 'ES', 'Santa Cruz de Tenerife', 'Santa Cruz de Tenerife'),
+(195, 'ES', 'Segovia', 'Segovia'),
+(195, 'ES', 'Sevilla', 'Sevilla'),
+(195, 'ES', 'Soria', 'Soria'),
+(195, 'ES', 'Tarragona', 'Tarragona'),
+(195, 'ES', 'Teruel', 'Teruel'),
+(195, 'ES', 'Toledo', 'Toledo'),
+(195, 'ES', 'Valencia', 'Valencia'),
+(195, 'ES', 'Valladolid', 'Valladolid'),
+(195, 'ES', 'Vizcaya', 'Vizcaya'),
+(195, 'ES', 'Zamora', 'Zamora'),
+(195, 'ES', 'Zaragoza', 'Zaragoza')
 GO
 
 SET IDENTITY_INSERT Core_District ON 
@@ -831,6 +1222,18 @@ INSERT INTO Core_District (Id, Name, [Type], [Location], StateOrProvinceId) VALU
 SET IDENTITY_INSERT Core_District OFF 
 GO
 
+SET IDENTITY_INSERT [dbo].[Shipping_ShippingProvider] ON 
+INSERT [dbo].[Shipping_ShippingProvider] ([Id], [AdditionalSettings], [ConfigureUrl], [IsEnabled], [Name], [OnlyCountryIdsString], [OnlyStateOrProvinceIdsString], [ShippingPriceServiceTypeName], [ToAllShippingEnabledCountries], [ToAllShippingEnabledStatesOrProvinces]) VALUES (1, N'{MinimumOrderAmount : 10000000}', N'shipping-free-config', 1, N'Free Ship', NULL, NULL, N'SimplCommerce.Module.ShippingFree.Services.FreeShippingService,SimplCommerce.Module.ShippingFree', 1, 1)
+INSERT [dbo].[Shipping_ShippingProvider] ([Id], [AdditionalSettings], [ConfigureUrl], [IsEnabled], [Name], [OnlyCountryIdsString], [OnlyStateOrProvinceIdsString], [ShippingPriceServiceTypeName], [ToAllShippingEnabledCountries], [ToAllShippingEnabledStatesOrProvinces]) VALUES (2, NULL, N'shipping-table-rate-config', 1, N'Table Rate', NULL, NULL, N'SimplCommerce.Module.ShippingTableRate.Services.TableRateShippingService,SimplCommerce.Module.ShippingTableRate', 1, 1)
+SET IDENTITY_INSERT [dbo].[Shipping_ShippingProvider] OFF
+GO
+
+SET IDENTITY_INSERT [dbo].[ShippingTableRate_PriceAndDestination] ON 
+INSERT [dbo].[ShippingTableRate_PriceAndDestination] ([Id], [CountryId], [MinOrderSubtotal], [ShippingPrice], [StateOrProvinceId]) VALUES (1, 238, CAST(0.00 AS Decimal(18, 2)), CAST(20.00 AS Decimal(18, 2)), 92)
+INSERT [dbo].[ShippingTableRate_PriceAndDestination] ([Id], [CountryId], [MinOrderSubtotal], [ShippingPrice], [StateOrProvinceId]) VALUES (2, 238, CAST(100000.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), 92)
+SET IDENTITY_INSERT [dbo].[ShippingTableRate_PriceAndDestination] OFF
+GO
+
 SET IDENTITY_INSERT [dbo].[Localization_Culture] ON
 INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (1, N'vi-VN')
 INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (2, N'fr-FR')
@@ -840,6 +1243,8 @@ INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (5, N'ru-RU')
 INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (6, N'ar-TN')
 INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (7, N'ko-KR')
 INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (8, N'tr-TR')
+INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (9, N'es-ES')
+INSERT [dbo].[Localization_Culture] ([Id], [Name]) VALUES (10, N'zh-CN')
 SET IDENTITY_INSERT [dbo].[Localization_Culture] OFF
 GO
 
@@ -1054,6 +1459,7 @@ INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (1, N'
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (1, N'Create Address', N'Tạo địa chỉ mới')
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (1, N'Your account', N'Tài khoản của bạn')
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (1, N'Date', N'Ngày')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (1, N'Customer Groups', N'Nhóm khách hàng')
 GO
 
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (2, N'Register', N'S''inscrire')
@@ -2092,3 +2498,427 @@ INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (8, N'
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (8, N'Create Address', N'Adres Oluştur')
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (8, N'Your account', N'Hesabınız')
 INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (8, N'Date', N'Tarih')
+
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Register', N'Registrar,')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Hello {0}!', N'Hola!')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Log in', N' Iniciar sesión')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Log off', N'Salir' )
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'The Email field is required.', N'El campo Correo electrónico es obligatorio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Email', N'Correo electrónico' )
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'User List', N'La lista de usario')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Remember me?', N'Recordarme?')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Password', N'Contraseña')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Use a local account to log in.', N'Use una cuenta local para iniciar sesión.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Register as a new user?', N'Registrarse como un nuevo usuario?')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Forgot your password?', N'Olvidaste tu contraseña?');
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Use another service to log in.', N'Use otro servicio para iniciar sesión.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Full name', N'Nombre completo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Confirm password', N'Confirmar contraseña')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create a new account.', N'Crea una cuenta nueva.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'All', N'Todo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Home', N'Inicio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Add to cart', N'Añadir a la cesta')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product detail', N'Detalle del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product specification', N'especificaciones del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Rate this product', N'Califica este producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Review comment', N'Revisión comentarios')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Review title', N'Título de Revisión ')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Posted by', N'publicado por')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Submit review', N'Enviar opinión')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'You have', N'Tienes.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'products in your cart', N'productos en su carrito')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Continue shopping', N'Seguir comprando')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'View cart', N'Ver carro')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'The product has been added to your cart', N'El producto ha sido añadido a tu carrito.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Cart subtotal', N'Subtotal del carrito')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Shopping Cart', N'Carrito de compras')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product', N'Producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Price', N'Precio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Quantity', N'수량Cantidad')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'There are no items in this cart.', N'No hay artículos en este carrito.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Go to shopping', N'Ir de compras')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order summary', N'Resumen de orden')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Subtotal', N'Total parcial')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Process to Checkout', N'Proceso para pagar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Shipping address', N'Dirección de Envío')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Add another address', N'Añadir otra dirección')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Contact name', N'Nombre de contacto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Address', N'Dirección')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'State or Province', N'Estado o Provincia')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'District', N'Distrito')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Phone', N'Teléfono')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order', N'Orden')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'products', N'productos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'reviews', N'Comentarios')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Add Review', N'Añadir Comentario')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Customer reviews', N'Reseñas de Clientes')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Your review will be showed within the next 24h.', N'Su opinión será mostrada dentro de las próximas 24h.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Thank you {0} for your review', N'Gracias por su comentario.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Rating average', N'Calificación promedio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'stars', N'Estrella')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Filter by', N'Filtrar por')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Category', N'Categoría')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Brand', N'Marca')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Sort by:', N'Ordenar por :')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'results', N'resultados')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'View options', N'Ver opciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Associate your {0} account.', N'{0} Asocia tu cuenta.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Users', N'Usuarios')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Vendors', N'Vendedores')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Reviews', N'Comentarios')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Products', N'Productos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Categories', N'Categorías')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Brands', N'Marcas')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Options', N'Opciones de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Attribute', N'Producto Atributo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Attribute Groups', N'Grupos de atributos del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Templates', N'Plantillas de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Sales', N'Ventas')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Orders', N'Pedidos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Content Management', N'Gestión de contenido')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Pages', N'Páginas')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Widgets', N'Herramientas')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'System', N'Sistema')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Configuration', N'Configuración')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Translations', N'Traducciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Dashboard', N'Tablero')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Incomplete orders', N'Pedidos incompletos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Pending reviews', N'Revisiones pendientes')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Most search keywords', N'La mayoría de  búsqueda de las palabras clave')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Most viewed products', N'Productos más vistos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'OrderId', N'Orden')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order Status', N'Estado del pedido')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Customer', N'Cliente')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Created On', N'Creado en')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'SubTotal', N'Subtotal')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Actions', N'Acciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Site', N'Sitio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Catalog', N'Catálogo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Title', N'Título')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Comment', N'Comentario')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Status', N'Estado')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Rating', N'Calificación')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Keyword', N'Palabra clave')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Count', N'Recuento')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create User', N'Crear usuario')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'FullName', N'Nombre completo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Roles', N'Papel')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit User', N'editar usuario')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Manager of Vendor', N'Gerente de vendedor')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Save', N'Guardar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Cancel', N'Cancelar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Phone Number', N'Número de teléfono')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Vendor', N'Crear Vendo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Is Active', N'Está activo.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Vendor', N'Editar vendedor')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Managers', N'Gerentes')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Description', N'Descripción')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Pending', N'Pendiente')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Approved', N'Aprobado')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Not Approved', N'No aprobado')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Approve', N'Aprobar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Product', N'Crear producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Has Options', N'Tiene opciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Is Visible Individually', N'Es Visible Individualmente.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Is Featured', N'Es Destacado')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Is Allowed To Order', N'Se permite ordenar.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Is Called For Pricing', N'Precios fijo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Stock Quantity', N'Cantidad de stock')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Is Published', N'Es publicado')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Yes', N'Si')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'No', N'No!')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Product', N'Editar producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Name', N'Nombre del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Short Description', N'Descripción breve')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Specification', N'Especificación')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Old Price', N'Precio antiguo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Special Price', N'Precio especial')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Special Price Start', N'Inicio el especial precio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Special Price End', N'Precio especial final')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Thumbnail', N'Miniatura')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Images', N'Imágenes del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Documents', N'Documentos del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Out Of Stock', N'Agotado')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Available Options', N'Opciones disponibles')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Add Option', N'Agregar opción')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Option Values', N'Valores de opciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Delete Option', N'Eliminar opción')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Generate Combinations', N'Generar combinaciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Variations', N'Variaciones del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Option Combinations', N'Combinaciones de opciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Images', N'Imágenes')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Apply', N'Aplicar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Available Attributes', N'Atributos disponibles')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Add Attribute', N'Añadir atributo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Attributes', N'Atributos del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Attribute Name', N'Nombre del atributo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Value', N'Valor')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'General Information', N'Información General')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Category Mapping', N'Mapeo de Categoría')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Related Products', N'Productos relacionados')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Manage Related Products', N'Administrar productos relacionados')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Category', N'Crear categoría')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Category', N'Editar categoría')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Brand', N'Crear marca')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Brand', N'Editar marca')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Name', N'Nombre')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Parent Category', N'Categoría principal')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Group', N'Grupo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Product Attribute', N'Crear atributo de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Product Attribute', N'Editar atributo del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Product Attribute Group', N'Crear grupo de atributos del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Product Attribute Group', N'Editar grupo de atributos del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Product Option', N'Crear opción de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Product Option', N'Editar opción de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Product Display Widget', N'Crear widget de pantalla de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Product Display Widget', N'Editar widget de pantalla del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Widget Name', N'Nombre del widget')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Widget Zone', N'Zona de widgets')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Publish Start', N'Publicar inicio')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Publish End', N'Publicar final')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Number of Products', N'Numeros de Productos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order By', N'Ordenar por')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Product Template', N'Crear plantilla de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Product Template', N'Editar plantilla de producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Added Attributes', N'Atributos agregados')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Back', N'Volver')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order Detail', N'Detalle del pedido')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order Information', N'Información del pedido')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Change', N'Cambiar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Product Information', N'Información del producto')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Shipping Information', N'Información de envío')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Application Settings', N'Configuración de la aplicación')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Page', N'Crear página')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Page', N'Editar página')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Body', N'Cuerpo')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Account Dashboard', N'Tablero de cuenta')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Account Information', N'Información de cuenta')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit', N'Editar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Security', N'Seguridad')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create', N'Crear')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'External Logins', N'Inicios externos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Manage', N'Administrar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Default shipping address', N'Dirección de envío predeterminada')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Manage address', N'Administrar dirección')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'You don''t have any default address', N'Usted no tiene ninguna dirección predeterminada.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Order History', N'Historial de pedidos')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Address Book', N'Libreta de direcciones')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Add Address', N'Agregar dirección')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Delete', N'Eliminar')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Set as default shipping address', N'Establecer como dirección de envío predeterminada')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Edit Address', N'Editar dirección')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Create Address', N'Crear dirección')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Your account', N'Tu cuenta')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (9, N'Date', N'Fecha')
+
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Register', N'注册,')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Hello {0}!', N'你好!')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Log in', N'登录')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Log off', N'退出登录' )
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'The Email field is required.', N'邮箱必填')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Email', N'邮箱' )
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'User List', N'用户清单')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Remember me?', N'记住我?')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Password', N'密码')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Use a local account to log in.', N'使用本地帐户登录.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Register as a new user?', N'注册为新用户?')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Forgot your password?', N'忘记密码?');
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Use another service to log in.', N'使用其他服务登录.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Full name', N'全名')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Confirm password', N'密码确定')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create a new account.', N'创建新账户.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'All', N'全部')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Home', N'首页')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Add to cart', N'加入购物车')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product detail', N'产品详细信息')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product specification', N'产品规格')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Rate this product', N'评价该产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Review comment', N'回顾评论')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Review title', N'评论标题')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Posted by', N'发表于')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Submit review', N'提交评论')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'You have', N'你有.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'products in your cart', N'购物车的产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Continue shopping', N'继续购买')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'View cart', N'查看购物车')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'The product has been added to your cart', N'该产品已被添加到您的购物车.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Cart subtotal', N'购物车小计')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Shopping Cart', N'购物车')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product', N'产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Price', N'价格')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Quantity', N'数量')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'There are no items in this cart.', N'此购物车中没有商品.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Go to shopping', N'开始购买')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order summary', N'订单总结')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Subtotal', N'小计');
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Process to Checkout', N'进行结算')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Shipping address', N'邮寄地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Add another address', N'添加地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Contact name', N'联系人姓名')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Address', N'地址');
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'State or Province', N'州或省')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'District', N'区')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Phone', N'手机号码')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order', N'订购')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'products', N'商品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'reviews', N'评论')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Add Review', N'添加评论')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Customer reviews', N'顾客评论')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Your review will be showed within the next 24h.', N'您的评论将在24小时内显示.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Thank you {0} for your review', N'谢谢您的评论.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Rating average', N'平均评分')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'stars', N'开始')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Filter by', N'过滤')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Category', N'类别')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Brand', N'品牌')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Sort by:', N'排序方式 :')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'results', N'结果')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'View options', N'查看选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Associate your {0} account.', N'{0} 联结账号.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Users', N'用户')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Vendors', N'供应商')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Reviews', N'评测')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Products', N'产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Categories', N'分类')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Brands', N'品牌')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Options', N'产品选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Attribute', N'产品属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Attribute Groups', N'产品属性组')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Templates', N'产品模板')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Sales', N'减价出售')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Orders', N'订货')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Content Management', N'内容管理')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Pages', N'页面')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Widgets', N'小工具')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'System', N'系统')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Configuration', N'设置')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Translations', N'翻译')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Dashboard', N'仪表板')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Incomplete orders', N'订单未完成')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Pending reviews', N'待审查')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Most search keywords', N'大多数搜索关键字')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Most viewed products', N'最受欢迎的产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'OrderId', N'排序')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order Status', N'订单状态')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Customer', N'客户')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Created On', N'创建于')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'SubTotal', N'小计')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Actions', N'操作')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Site', N'位置')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Catalog', N'目录')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Title', N'标题')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Comment', N'评论')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Status', N'状态')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Rating', N'评分')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Keyword', N'关键词')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Count', N'计数')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create User', N'创建用户')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'FullName', N'全名')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Roles', N'角色')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit User', N'编辑用户')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Manager of Vendor', N'供应商管理')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Save', N'保存')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Cancel', N'取消')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Phone Number', N'电话号码')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Vendor', N'创建供应商')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Is Active', N'活跃.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Vendor', N'编辑供应商')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Managers', N'管理员')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Description', N'描述')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Pending', N'有待')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Approved', N'批准')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Not Approved', N'不批准')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Approve', N'批准')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Product', N'创建产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Has Options', N'有选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Is Visible Individually', N'单独可见.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Is Featured', N'精品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Is Allowed To Order', N'允许订购.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Is Called For Pricing', N'定价')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Stock Quantity', N'库存数量')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Is Published', N'发布')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Yes', N'确定')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'No', N'否!')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Product', N'编辑产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Name', N'产品名称')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Short Description', N'简短描述')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Specification', N'规范')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Old Price', N'原价')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Special Price', N'特价')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Special Price Start', N'特价开始')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Special Price End', N'特价结束')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Thumbnail', N'缩略图')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Images', N'产品图片')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Documents', N'产品文件')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Out Of Stock', N'断货')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Available Options', N'可用选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Add Option', N'添加选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Option Values', N'选项值')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Delete Option', N'删除选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Generate Combinations', N'生成组合')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Variations', N'产品型号')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Option Combinations', N'选项组合')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Images', N'图片')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Apply', N'提供')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Available Attributes', N'可用属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Add Attribute', N'添加属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Attributes', N'产品属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Attribute Name', N'属性名称')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Value', N'值')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'General Information', N'一般信息')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Category Mapping', N'类别映射')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Related Products', N'相关产品')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Manage Related Products', N'相关产品管理')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Category', N'创建类别')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Category', N'编辑类别')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Brand', N'创建您的品牌')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Brand', N'修改您的品牌')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Name', N'名称')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Parent Category', N'顶级类别')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Group', N'组')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Product Attribute', N'创建产品属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Product Attribute', N'编辑产品属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Product Attribute Group', N'创建产品属性组')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Product Attribute Group', N'编辑产品属性组')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Product Option', N'产品创建选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Product Option', N'编辑产品选项')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Product Display Widget', N'创建产品展示小部件')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Product Display Widget', N'编辑产品展示小部件')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Widget Name', N'小工具名称')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Widget Zone', N'小部件区域')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Publish Start', N'开始发布')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Publish End', N'发布结束')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Number of Products', N'产品数量')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order By', N'按排序')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Product Template', N'创建产品模板')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Product Template', N'编辑产品模板')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Added Attributes', N'添加属性')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Back', N'返回')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order Detail', N'订单详情')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order Information', N'订单信息')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Change', N'更改')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Product Information', N'产品信息')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Shipping Information', N'运送信息')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Application Settings', N'应用设置')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Page', N'创建页面')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Page', N'编辑页面')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Body', N'体')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Account Dashboard', N'帐户信息中心')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Account Information', N'帐户信息')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit', N'编辑')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Security', N'安全')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create', N'创建')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'External Logins', N'外部登录')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Manage', N'管理')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Default shipping address', N'默认邮寄地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Manage address', N'地址管理')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'You don''t have any default address', N'您没有任何的默认地址.')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Order History', N'订单记录')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Address Book', N'地址簿')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Add Address', N'添加地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Delete', N'取消')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Set as default shipping address', N'设置为默认邮寄地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Edit Address', N'编辑地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Create Address', N'创建地址')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Your account', N'您的帐号')
+INSERT [dbo].[Localization_Resource] ([CultureId], [Key], [Value]) VALUES (10, N'Date', N'日期')

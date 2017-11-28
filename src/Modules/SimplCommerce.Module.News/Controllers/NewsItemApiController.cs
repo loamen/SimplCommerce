@@ -27,12 +27,12 @@ namespace SimplCommerce.Module.News.Controllers
         private readonly IMediaService _mediaService;
         private readonly IWorkContext _workContext;
 
-        public NewsItemApiController(IRepository<NewsItem> newsItemRepository, INewsItemService newsItemService, IMediaService mediaService, IWorkContext workContent)
+        public NewsItemApiController(IRepository<NewsItem> newsItemRepository, INewsItemService newsItemService, IMediaService mediaService, IWorkContext workContext)
         {
             _newsItemRepository = newsItemRepository;
             _newsItemService = newsItemService;
             _mediaService = mediaService;
-            _workContext = workContent;
+            _workContext = workContext;
         }
 
         [HttpPost("grid")]
@@ -72,7 +72,7 @@ namespace SimplCommerce.Module.News.Controllers
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    SeoTitle = x.SeoTitle,
+                    Slug = x.SeoTitle,
                     IsPublished = x.IsPublished,
                     CreatedOn = x.CreatedOn
                 });
@@ -91,7 +91,7 @@ namespace SimplCommerce.Module.News.Controllers
             {
                 Name = newsItem.Name,
                 Id = newsItem.Id,
-                SeoTitle = newsItem.SeoTitle,
+                Slug = newsItem.SeoTitle,
                 ShortContent = newsItem.ShortContent,
                 FullContent = newsItem.FullContent,
                 IsPublished = newsItem.IsPublished,
@@ -114,7 +114,7 @@ namespace SimplCommerce.Module.News.Controllers
             var newsItem = new NewsItem
             {
                 Name = model.Name,
-                SeoTitle = model.SeoTitle,
+                SeoTitle = model.Slug,
                 ShortContent = model.ShortContent,
                 FullContent = model.FullContent,
                 IsPublished = model.IsPublished,
@@ -130,11 +130,9 @@ namespace SimplCommerce.Module.News.Controllers
                 newsItem.AddNewsItemCategory(newsItemCategory);
             }
 
-            SaveServiceMedia(model.ThumbnailImage, newsItem);
-
+            await SaveServiceMedia(model.ThumbnailImage, newsItem);
             _newsItemService.Create(newsItem);
-
-            return Ok();
+            return CreatedAtAction(nameof(Get), new { id = newsItem.Id }, null);
         }
 
         [HttpPut("{id}")]
@@ -153,7 +151,7 @@ namespace SimplCommerce.Module.News.Controllers
             var currentUser = await _workContext.GetCurrentUser();
 
             newsItem.Name = model.Name;
-            newsItem.SeoTitle = model.SeoTitle;
+            newsItem.SeoTitle = model.Slug;
             newsItem.ShortContent = model.ShortContent;
             newsItem.FullContent = model.FullContent;
             newsItem.IsPublished = model.IsPublished;
@@ -164,45 +162,40 @@ namespace SimplCommerce.Module.News.Controllers
 
             if (model.ThumbnailImage != null && newsItem.ThumbnailImage != null)
             {
-                _mediaService.DeleteMedia(newsItem.ThumbnailImage);
+                await _mediaService.DeleteMediaAsync(newsItem.ThumbnailImage);
             }
 
-            SaveServiceMedia(model.ThumbnailImage, newsItem);
-
+            await SaveServiceMedia(model.ThumbnailImage, newsItem);
             _newsItemService.Update(newsItem);
-
-            return Ok();
+            return Accepted();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
             var newsItem = _newsItemRepository.Query().FirstOrDefault(x => x.Id == id);
-
             if (newsItem == null)
             {
                 return NotFound();
             }
 
-            var currentUser = await _workContext.GetCurrentUser();
-            _newsItemService.Delete(newsItem);
-
-            return Ok();
+            await _newsItemService.Delete(newsItem);
+            return NoContent();
         }
 
-        private string SaveFile(IFormFile file)
+        private async Task<string> SaveFile(IFormFile file)
         {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Value.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            _mediaService.SaveMedia(file.OpenReadStream(), fileName, file.ContentType);
+            await _mediaService.SaveMediaAsync(file.OpenReadStream(), fileName, file.ContentType);
             return fileName;
         }
 
-        private void SaveServiceMedia(IFormFile image, NewsItem newsItem)
+        private async Task SaveServiceMedia(IFormFile image, NewsItem newsItem)
         {
             if (image != null)
             {
-                var fileName = SaveFile(image);
+                var fileName = await SaveFile(image);
                 if (newsItem.ThumbnailImage != null)
                 {
                     newsItem.ThumbnailImage.FileName = fileName;

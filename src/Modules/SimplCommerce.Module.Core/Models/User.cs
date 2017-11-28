@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using SimplCommerce.Infrastructure.Models;
 
 namespace SimplCommerce.Module.Core.Models
 {
-    public class User : IdentityUser<long, IdentityUserClaim<long>, UserRole, IdentityUserLogin<long>>, IEntityWithTypedId<long>
+    public class User : IdentityUser<long>, IEntityWithTypedId<long>
     {
         public User()
         {
@@ -34,5 +34,9 @@ namespace SimplCommerce.Module.Core.Models
         public UserAddress DefaultBillingAddress { get; set; }
 
         public long? DefaultBillingAddressId { get; set; }
+
+        public IList<UserRole> Roles { get; set; } =  new List<UserRole>();
+
+        public IList<UserCustomerGroup> CustomerGroups { get; set; } = new List<UserCustomerGroup>();
     }
 }

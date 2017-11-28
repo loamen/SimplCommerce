@@ -40,7 +40,6 @@ namespace SimplCommerce.Module.Orders.Controllers
 
             var query = _orderRepository
                 .Query()
-                .Include(x => x.CreatedBy)
                 .Where(x => x.OrderStatus == orderStatus);
 
             var currentUser = await _workContext.GetCurrentUser();
@@ -65,8 +64,7 @@ namespace SimplCommerce.Module.Orders.Controllers
         public async Task<ActionResult> List([FromBody] SmartTableParam param)
         {
             IQueryable<Order> query = _orderRepository
-                .Query()
-                .Include(x => x.CreatedBy);
+                .Query();
 
             var currentUser = await _workContext.GetCurrentUser();
             if (!User.IsInRole("admin"))
@@ -128,7 +126,9 @@ namespace SimplCommerce.Module.Orders.Controllers
         {
             var order = _orderRepository
                 .Query()
-                .Include(x => x.ShippingAddress).ThenInclude(x => x.District).ThenInclude(x => x.StateOrProvince)
+                .Include(x => x.ShippingAddress).ThenInclude(x => x.District)
+                .Include(x => x.ShippingAddress).ThenInclude(x => x.StateOrProvince)
+                .Include(x => x.ShippingAddress).ThenInclude(x => x.Country)
                 .Include(x => x.OrderItems).ThenInclude(x => x.Product).ThenInclude(x => x.ThumbnailImage)
                 .Include(x => x.OrderItems).ThenInclude(x => x.Product).ThenInclude(x => x.OptionCombinations).ThenInclude(x => x.Option)
                 .Include(x => x.CreatedBy)
@@ -152,13 +152,15 @@ namespace SimplCommerce.Module.Orders.Controllers
                 OrderStatus = (int) order.OrderStatus,
                 OrderStatusString = order.OrderStatus.ToString(),
                 CustomerName = order.CreatedBy.FullName,
-                SubTotal = order.SubTotal,
+                Subtotal = order.SubTotal,
+                Discount = order.Discount,
+                SubTotalWithDiscount = order.SubTotalWithDiscount,
                 ShippingAddress = new ShippingAddressVm
                 {
                     AddressLine1 = order.ShippingAddress.AddressLine1,
                     AddressLine2 = order.ShippingAddress.AddressLine2,
                     ContactName = order.ShippingAddress.ContactName,
-                    DistrictName = order.ShippingAddress.District.Name,
+                    DistrictName = order.ShippingAddress.District?.Name,
                     StateOrProvinceName = order.ShippingAddress.StateOrProvince.Name,
                     Phone = order.ShippingAddress.Phone
                 },
@@ -194,7 +196,7 @@ namespace SimplCommerce.Module.Orders.Controllers
             if (Enum.IsDefined(typeof(OrderStatus), statusId))
             {
                 order.OrderStatus = (OrderStatus) statusId;
-                _orderRepository.SaveChange();
+                _orderRepository.SaveChanges();
                 return Ok();
             }
             return BadRequest(new {Error = "unsupported order status"});

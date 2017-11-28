@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using SimplCommerce.Infrastructure.Data;
 using SimplCommerce.Module.Catalog.Models;
 using SimplCommerce.Module.Core.Services;
@@ -24,10 +25,10 @@ namespace SimplCommerce.Module.Catalog.Services
             {
                 brand.SeoTitle = _entityService.ToSafeSlug(brand.SeoTitle, brand.Id, BrandEntityTypeId);
                 _brandRepository.Add(brand);
-                _brandRepository.SaveChange();
+                _brandRepository.SaveChanges();
 
                 _entityService.Add(brand.Name, brand.SeoTitle, brand.Id, BrandEntityTypeId);
-                _brandRepository.SaveChange();
+                _brandRepository.SaveChanges();
 
                 transaction.Commit();
             }
@@ -37,20 +38,20 @@ namespace SimplCommerce.Module.Catalog.Services
         {
             brand.SeoTitle = _entityService.ToSafeSlug(brand.SeoTitle, brand.Id, BrandEntityTypeId);
             _entityService.Update(brand.Name, brand.SeoTitle, brand.Id, BrandEntityTypeId);
-            _brandRepository.SaveChange();
+            _brandRepository.SaveChanges();
         }
 
-        public void Delete(long id)
+        public async Task Delete(long id)
         {
             var brand = _brandRepository.Query().First(x => x.Id == id);
-            Delete(brand);
+            await Delete(brand);
         }
 
-        public void Delete(Brand brand)
+        public async Task Delete(Brand brand)
         {
             brand.IsDeleted = true;
-            _entityService.Remove(brand.Id, BrandEntityTypeId);
-            _brandRepository.SaveChange();
+            await _entityService.Remove(brand.Id, BrandEntityTypeId);
+            _brandRepository.SaveChanges();
         }
     }
 }

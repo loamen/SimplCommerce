@@ -1,13 +1,14 @@
-﻿using SimplCommerce.Module.Cms.Models;
+﻿using System.Threading.Tasks;
+using SimplCommerce.Module.Cms.Models;
 
 namespace SimplCommerce.Module.Cms.Services
 {
     public interface IPageService
     {
-        void Create(Page page);
+        Task Create(Page page);
 
-        void Update(Page page);
+        Task Update(Page page);
 
-        void Delete(Page page);
+        Task Delete(Page page);
     }
 }

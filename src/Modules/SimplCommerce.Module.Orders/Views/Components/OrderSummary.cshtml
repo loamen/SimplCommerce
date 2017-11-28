@@ -1,13 +1,13 @@
-﻿@model SimplCommerce.Module.Orders.ViewModels.CartViewModel
+﻿@model SimplCommerce.Module.ShoppingCart.ViewModels.CartVm
 
-<h3>@Localizer["Order summary"] (@Model.CartItems.Count() @Localizer["products"]) </h3>
+<h3>@Localizer["Order summary"] (@Model.Items.Count() @Localizer["products"]) </h3>
 <table class="table table-striped">
     <tr>
         <th>@Localizer["Product"]</th>
         <th class="text-center">@Localizer["Quantity"]</th>
         <th class="text-right">@Localizer["Price"]</th>
     </tr>
-    @foreach (var item in Model.CartItems)
+    @foreach (var item in Model.Items)
     {
         <tr>
             <td>
@@ -27,7 +27,26 @@
         </tr>
     }
     <tr>
-        <td><strong>@Localizer["Subtotal"]</strong></td>
-        <td colspan="2" class="text-right"><strong>@Model.SubTotal</strong></td>
+        <td>@Localizer["Subtotal"]</td>
+        <td colspan="2" class="text-right">@Model.SubTotal.ToString("C")<input type="hidden" id="orderSubtotal" value="@Model.SubTotal" /></td>
+    </tr>
+    <tr>
+        <td>@Localizer["Shipping"]</td>
+        <td colspan="2" id="orderSummaryShipping" class="text-right">-</td>
+    </tr>
+    @if (!Model.IsTaxIncludedInProductPrice)
+    {
+    <tr>
+        <td>Tax</td>
+        <td colspan="2" id="orderSummaryTax" class="text-right">-</td>
+    </tr>
+    }
+    <tr>
+        <td>@Localizer["Discount"]</td>
+        <td colspan="2" class="text-right">@Model.Discount.ToString("C")</td>
+    </tr>
+    <tr>
+        <td><strong>@Localizer["Order Total"]</strong>@if (Model.IsTaxIncludedInProductPrice) { @Localizer["VAT included"] }</td>
+        <td colspan="2" class="text-right"><strong id="orderTotal">@Model.OrderTotal.ToString("C")</strong></td>
     </tr>
 </table>

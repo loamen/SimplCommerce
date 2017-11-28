@@ -1,5 +1,7 @@
-﻿DELETE FROM "Core_Entity";
-DELETE FROM "Orders_CartItem";
+﻿DELETE FROM "Cms_MenuItem";
+DELETE FROM "Core_Entity";
+DELETE FROM "ShoppingCart_Cart";
+DELETE FROM "ShoppingCart_CartItem";
 DELETE FROM "Orders_OrderItem";
 DELETE FROM "Orders_Order";
 DELETE FROM "Catalog_ProductAttributeValue";
@@ -12,6 +14,7 @@ DELETE FROM "Catalog_ProductCategory";
 DELETE FROM "Catalog_ProductLink";
 DELETE FROM "Catalog_Product";
 DELETE FROM "Catalog_Category";
+DELETE FROM "News_NewsItem";
 DELETE FROM "Core_Media";
 DELETE FROM "Catalog_Brand";
 DELETE FROM "Catalog_ProductTemplateProductAttribute";
@@ -20,22 +23,21 @@ DELETE FROM "Cms_Page";
 DELETE FROM "Core_WidgetInstance";
 DELETE FROM "Reviews_Review";
 
-
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (1, 'Phones', 'phones', NULL, 0, true, false, NULL, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (2, 'Smart Phones', 'smart-phones', NULL, 0, true, false, 1, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (3, 'Basic Phones', 'basic-phones', NULL, 0, true, false, 1, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (4, 'Tablets', 'tablets', NULL, 0, true, false, NULL, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (5, 'Wifi + Cellular tablets', 'wifi-cellular-tablets', NULL, 0, true, false, 4, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (6, 'Cellular tablets', 'cellular-tablets', NULL, 0, true, false, 4, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (7, 'Computers', 'computers', NULL, 0, true, false, NULL, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (8, 'Gaming', 'gaming', NULL, 0, true, false, 7, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (9, 'Business', 'business', NULL, 0, true, false, 7, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (10, 'Accessories', 'accessories', NULL, 0, true, false, NULL, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (11, 'Headphones', 'headphones', NULL, 0, true, false, 10, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (12, 'Cables', 'cables', NULL, 0, true, false, 10, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (13, 'USB Drives', 'usb-drives', NULL, 0, true, false, 10, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (14, N'Test 1', N'test-1', NULL, 0, true, false, 2, NULL);
-INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId") VALUES (15, N'Test 2', N'test-2', NULL, 0, true, false, 2, NULL);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (1, 'Phones', 'phones', NULL, 0, true, false, NULL, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (2, 'Smart Phones', 'smart-phones', NULL, 0, true, false, 1, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (3, 'Basic Phones', 'basic-phones', NULL, 0, true, false, 1, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (4, 'Tablets', 'tablets', NULL, 0, true, false, NULL, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (5, 'Wifi + Cellular tablets', 'wifi-cellular-tablets', NULL, 0, true, false, 4, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (6, 'Cellular tablets', 'cellular-tablets', NULL, 0, true, false, 4, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (7, 'Computers', 'computers', NULL, 0, true, false, NULL, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (8, 'Gaming', 'gaming', NULL, 0, true, false, 7, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (9, 'Business', 'business', NULL, 0, true, false, 7, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (10, 'Accessories', 'accessories', NULL, 0, true, false, NULL, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (11, 'Headphones', 'headphones', NULL, 0, true, false, 10, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (12, 'Cables', 'cables', NULL, 0, true, false, 10, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (13, 'USB Drives', 'usb-drives', NULL, 0, true, false, 10, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (14, N'Test 1', N'test-1', NULL, 0, true, false, 2, NULL, true);
+INSERT INTO "Catalog_Category" ("Id", "Name", "SeoTitle", "Description", "DisplayOrder", "IsPublished", "IsDeleted", "ParentId", "ThumbnailImageId", "IncludeInMenu") VALUES (15, N'Test 2', N'test-2', NULL, 0, true, false, 2, NULL, true);
 SELECT pg_catalog.setval('"Catalog_Category_Id_seq"', 15, true);
 
 
@@ -308,9 +310,9 @@ INSERT INTO "Catalog_ProductOptionCombination" ("Id", "OptionId", "ProductId", "
 INSERT INTO "Catalog_ProductOptionCombination" ("Id", "OptionId", "ProductId", "Value", "SortIndex") VALUES (10, 1, 13, 'Silver', 0);
 SELECT pg_catalog.setval('"Catalog_ProductOptionCombination_Id_seq"', 10, true);
 
-INSERT INTO "Catalog_ProductOptionValue" ("Id", "OptionId", "ProductId", "Value", "SortIndex") VALUES (1, 1, 1, '["Silver","Gold","Gray"]', 0);
-INSERT INTO "Catalog_ProductOptionValue" ("Id", "OptionId", "ProductId", "Value", "SortIndex") VALUES (4, 1, 5, '["Gold","Black","Pink"]', 0);
-INSERT INTO "Catalog_ProductOptionValue" ("Id", "OptionId", "ProductId", "Value", "SortIndex") VALUES (7, 1, 9, '["Gray","Pink","Gold", "Silver"]', 0);
+INSERT INTO "Catalog_ProductOptionValue" ("Id", "DisplayType", "OptionId", "ProductId", "Value", "SortIndex") VALUES (1, 'color', 1, 1, '[{{"Key":"Silver","Display":"#E5E4EA"}},{{"Key":"Gold","Display":"#daa520"}},{{"Key":"Gray","Display":"#a9a9a9"}}]', 0);
+INSERT INTO "Catalog_ProductOptionValue" ("Id", "DisplayType", "OptionId", "ProductId", "Value", "SortIndex") VALUES (2, 'color', 1, 5, '[{{"Key":"Gold","Display":"#daa520"}},{{"Key":"Black","Display":"#000000"}},{{"Key":"Pink","Display":"#FFC0CB"}}]', 0);
+INSERT INTO "Catalog_ProductOptionValue" ("Id", "DisplayType", "OptionId", "ProductId", "Value", "SortIndex") VALUES (3, 'color', 1, 9, '[{{"Key":"Gray","Display":"#a9a9a9"}},{{"Key":"Pink","Display":"#FFC0CB"}},{{"Key":"Gold","Display":"#daa520"}},{{"Key":"Silver","Display":"#E5E4EA"}}]', 0);
 SELECT pg_catalog.setval('"Catalog_ProductOptionValue_Id_seq"', 3, true);
 
 
@@ -366,6 +368,16 @@ INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VAL
 INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (30, 2, 2, 'Samsung', 'samsung');
 INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (31, 3, 2, 'Dell', 'dell');
 INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (32, 14, 3, 'Dell XPS15 9550', 'dell-xps-15-9550');
-INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (33, 14, 1, 'Test 1', N'test-1');
-INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (34, 15, 1, 'Test 2', N'test-2');
+INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (33, 14, 1, 'Test 1', 'test-1');
+INSERT INTO "Core_Entity" ("Id", "EntityId", "EntityTypeId", "Name", "Slug") VALUES (34, 15, 1, 'Test 2', 'test-2');
 SELECT pg_catalog.setval('"Core_Entity_Id_seq"', 34, true);
+
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (1, NULL, 21, 1, NULL, 'Help Center');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (2, NULL, 22, 1, NULL, 'How to buy');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (3, NULL, 23, 1, NULL, 'Shipping');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (4, NULL, 24, 1, NULL, 'How to return');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (5, NULL, 25, 1, NULL, 'Warranty');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (6, NULL, 18, 2, NULL, 'About Us');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (7, NULL, 19, 2, NULL, 'Terms of Use');
+INSERT INTO "Cms_MenuItem" ("Id", "CustomLink", "EntityId", "MenuId", "ParentId", "Name") VALUES (8, NULL, 20, 2, NULL, 'Privacy');
+SELECT pg_catalog.setval('"Cms_MenuItem_Id_seq"', 8, true);

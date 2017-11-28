@@ -23,7 +23,15 @@ namespace SimplCommerce.Module.Orders.Models
 
         public long? VendorId { get; set; }
 
+        public string CouponCode { get; set; }
+
+        public string CouponRuleName { get; set; }
+
+        public decimal Discount { get; set; }
+
         public decimal SubTotal { get; set; }
+
+        public decimal SubTotalWithDiscount { get; set; }
 
         public long ShippingAddressId { get; set; }
 
@@ -40,6 +48,14 @@ namespace SimplCommerce.Module.Orders.Models
         public long? ParentId { get; set; }
 
         public Order Parent { get; set; }
+
+        public string ShippingMethod { get; set; }
+
+        public decimal ShippingAmount { get; set; }
+
+        public decimal TaxAmount { get; set; }
+
+        public decimal OrderTotal { get; set; }
 
         public IList<Order> Children { get; protected set; } = new List<Order>();
 

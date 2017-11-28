@@ -23,7 +23,6 @@ namespace SimplCommerce.Module.Catalog.Controllers
         {
             var attributes = _productAttrRepository
                 .Query()
-                .Include(x => x.Group)
                 .Select(x => new
                 {
                     Id = x.Id,
@@ -61,7 +60,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
                 };
 
                 _productAttrRepository.Add(productAttribute);
-                _productAttrRepository.SaveChange();
+                _productAttrRepository.SaveChanges();
 
                 return Ok();
             }
@@ -78,7 +77,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
                 productAttribute.Name = model.Name;
                 productAttribute.GroupId = model.GroupId;
 
-                _productAttrRepository.SaveChange();
+                _productAttrRepository.SaveChanges();
 
                 return Ok();
             }

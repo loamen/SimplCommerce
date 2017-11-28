@@ -45,7 +45,9 @@ var bower = {
     "angular-bootstrap": "angular-bootstrap/ui-bootstrap*",
     "matchheight": "matchheight/dist/*.js",
     "toastr": "toastr/toastr*.{js,css}",
-    "bootbox": "bootbox/bootbox*.{js,css}"
+    "bootbox": "bootbox/bootbox*.{js,css}",
+    "angular-ui-tree": "angular-ui-tree/dist/*.*",
+    "angular-bootstrap-colorpicker": "angular-bootstrap-colorpicker/{js,css,img}/*.*"
 };
 
 gulp.task('clean-module', function () {
@@ -57,7 +59,7 @@ gulp.task('copy-modules', ['clean-module'], function () {
     modules.forEach(function (module) {
         gulp.src([mPaths.devModules + module.fullName + '/Views/**/*.*', mPaths.devModules + module.fullName + '/module.json'], { base: module.fullName })
             .pipe(gulp.dest(mPaths.hostModules + module.fullName));
-        gulp.src(mPaths.devModules + module.fullName + '/bin/Debug/netstandard1.6/**/*.*')
+        gulp.src(mPaths.devModules + module.fullName + '/bin/Debug/netcoreapp2.0/**/*.*')
             .pipe(gulp.dest(mPaths.hostModules + module.fullName + '/bin'));
         gulp.src(mPaths.devModules + module.fullName + '/wwwroot/**/*.*')
             .pipe(gulp.dest(mPaths.hostWwwrootModules + module.name));
@@ -83,7 +85,7 @@ function loadModules() {
     var moduleManifestPaths,
         modules = [];
 
-    moduleManifestPaths = glob.sync(mPaths.devModules + 'SimplCommerce.Module.*/module.json', {});
+    moduleManifestPaths = glob.sync(mPaths.devModules + '*.*/module.json', {});
     moduleManifestPaths.forEach(function (moduleManifestPath) {
         var moduleManifest = require(moduleManifestPath);
         modules.push(moduleManifest);

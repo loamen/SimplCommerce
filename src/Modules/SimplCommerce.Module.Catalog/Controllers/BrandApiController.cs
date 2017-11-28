@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SimplCommerce.Infrastructure;
 using SimplCommerce.Infrastructure.Data;
 using SimplCommerce.Module.Catalog.Models;
 using SimplCommerce.Module.Catalog.Services;
@@ -37,6 +37,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
             {
                 Id = brand.Id,
                 Name = brand.Name,
+                Slug = brand.SeoTitle,
                 IsPublished = brand.IsPublished
             };
 
@@ -52,7 +53,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
                 var brand = new Brand
                 {
                     Name = model.Name,
-                    SeoTitle = model.Name.ToUrlFriendly(),
+                    SeoTitle = model.Slug,
                     IsPublished = model.IsPublished
                 };
 
@@ -71,7 +72,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
             {
                 var brand = _brandRepository.Query().FirstOrDefault(x => x.Id == id);
                 brand.Name = model.Name;
-                brand.SeoTitle = model.Name.ToUrlFriendly();
+                brand.SeoTitle = model.Slug;
                 brand.IsPublished = model.IsPublished;
 
                 _brandService.Update(brand);
@@ -84,7 +85,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
             var brand = _brandRepository.Query().FirstOrDefault(x => x.Id == id);
             if (brand == null)
@@ -92,7 +93,7 @@ namespace SimplCommerce.Module.Catalog.Controllers
                 return new NotFoundResult();
             }
 
-            _brandService.Delete(brand);
+            await _brandService.Delete(brand);
             return Json(true);
         }
     }

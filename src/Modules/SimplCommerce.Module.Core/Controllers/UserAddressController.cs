@@ -15,15 +15,17 @@ namespace SimplCommerce.Module.Core.Controllers
     public class UserAddressController : Controller
     {
         private readonly IRepository<UserAddress> _userAddressRepository;
+        private readonly IRepository<Country> _countryRepository;
         private readonly IRepository<StateOrProvince> _stateOrProvinceRepository;
         private readonly IRepository<District> _districtRepository;
         private readonly IRepository<User> _userRepository;
         private readonly IWorkContext _workContext;
 
-        public UserAddressController(IRepository<UserAddress> userAddressRepository, IRepository<StateOrProvince> stateOrProvinceRepository,
+        public UserAddressController(IRepository<UserAddress> userAddressRepository, IRepository<Country> countryRepository, IRepository<StateOrProvince> stateOrProvinceRepository,
             IRepository<District> districtRepository, IRepository<User> userRepository, IWorkContext workContext)
         {
             _userAddressRepository = userAddressRepository;
+            _countryRepository = countryRepository;
             _stateOrProvinceRepository = stateOrProvinceRepository;
             _districtRepository = districtRepository;
             _userRepository = userRepository;
@@ -52,7 +54,7 @@ namespace SimplCommerce.Module.Core.Controllers
 
             foreach (var item in model)
             {
-                item.IsDefaultShippingAddress = item.AddressId == currentUser.DefaultShippingAddressId;
+                item.IsDefaultShippingAddress = item.UserAddressId == currentUser.DefaultShippingAddressId;
             }
 
             return View(model);
@@ -79,10 +81,13 @@ namespace SimplCommerce.Module.Core.Controllers
                 var address = new Address
                 {
                     AddressLine1 = model.AddressLine1,
+                    AddressLine2 = model.AddressLine2,
                     ContactName = model.ContactName,
-                    CountryId = 1,
+                    CountryId = model.CountryId,
                     StateOrProvinceId = model.StateOrProvinceId,
                     DistrictId = model.DistrictId,
+                    City = model.City,
+                    PostalCode = model.PostalCode,
                     Phone = model.Phone
                 };
 
@@ -94,7 +99,7 @@ namespace SimplCommerce.Module.Core.Controllers
                 };
 
                 _userAddressRepository.Add(userAddress);
-                _userAddressRepository.SaveChange();
+                _userAddressRepository.SaveChanges();
                 return RedirectToAction("List");
             }
 
@@ -122,8 +127,12 @@ namespace SimplCommerce.Module.Core.Controllers
                 ContactName = userAddress.Address.ContactName,
                 Phone = userAddress.Address.Phone,
                 AddressLine1 = userAddress.Address.AddressLine1,
+                AddressLine2 = userAddress.Address.AddressLine2,
+                CountryId = userAddress.Address.CountryId,
                 DistrictId = userAddress.Address.DistrictId,
-                StateOrProvinceId = userAddress.Address.StateOrProvinceId
+                StateOrProvinceId = userAddress.Address.StateOrProvinceId,
+                City = userAddress.Address.City,
+                PostalCode = userAddress.Address.PostalCode
             };
 
             PopulateAddressFormData(model);
@@ -149,13 +158,16 @@ namespace SimplCommerce.Module.Core.Controllers
                 }
 
                 userAddress.Address.AddressLine1 = model.AddressLine1;
+                userAddress.Address.AddressLine2 = model.AddressLine2;
                 userAddress.Address.ContactName = model.ContactName;
-                userAddress.Address.CountryId = 1;
+                userAddress.Address.CountryId = model.CountryId;
                 userAddress.Address.StateOrProvinceId = model.StateOrProvinceId;
                 userAddress.Address.DistrictId = model.DistrictId;
+                userAddress.Address.City = model.City;
+                userAddress.Address.PostalCode = model.PostalCode;
                 userAddress.Address.Phone = model.Phone;
 
-                _userAddressRepository.SaveChange();
+                _userAddressRepository.SaveChanges();
                 return RedirectToAction("List");
             }
 
@@ -169,7 +181,6 @@ namespace SimplCommerce.Module.Core.Controllers
             var currentUser = await _workContext.GetCurrentUser();
 
             var userAddress = _userAddressRepository.Query()
-                .Include(x => x.Address)
                 .FirstOrDefault(x => x.Id == id && x.UserId == currentUser.Id);
 
             if (userAddress == null)
@@ -177,8 +188,8 @@ namespace SimplCommerce.Module.Core.Controllers
                 return NotFound();
             }
 
-            currentUser.DefaultShippingAddressId = userAddress.AddressId;
-            _userRepository.SaveChange();
+            currentUser.DefaultShippingAddressId = userAddress.Id;
+            _userRepository.SaveChanges();
 
             return RedirectToAction("List");
         }
@@ -189,7 +200,6 @@ namespace SimplCommerce.Module.Core.Controllers
             var currentUser = await _workContext.GetCurrentUser();
 
             var userAddress = _userAddressRepository.Query()
-                .Include(x => x.Address)
                 .FirstOrDefault(x => x.Id == id && x.UserId == currentUser.Id);
 
             if (userAddress == null)
@@ -197,16 +207,32 @@ namespace SimplCommerce.Module.Core.Controllers
                 return NotFound();
             }
 
+            if(currentUser.DefaultShippingAddressId == userAddress.Id)
+            {
+                currentUser.DefaultShippingAddressId = null;
+            }
+
             _userAddressRepository.Remove(userAddress);
-            _userAddressRepository.SaveChange();
+            _userAddressRepository.SaveChanges();
 
             return RedirectToAction("List");
         }
 
         private void PopulateAddressFormData(UserAddressFormViewModel model)
         {
+            model.Countries = _countryRepository.Query()
+                .Where(x => x.IsShippingEnabled)
+                .OrderBy(x => x.Name)
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var onlyShipableCountryId = model.CountryId > 0 ? model.CountryId : long.Parse(model.Countries.First().Value);
             model.StateOrProvinces = _stateOrProvinceRepository
                 .Query()
+                .Where(x => x.CountryId == onlyShipableCountryId)
                 .OrderBy(x => x.Name)
                 .Select(x => new SelectListItem
                 {
@@ -214,17 +240,18 @@ namespace SimplCommerce.Module.Core.Controllers
                     Value = x.Id.ToString()
                 }).ToList();
 
-            var selectedStateOrProvince = model.StateOrProvinceId > 0 ? model.StateOrProvinceId : long.Parse(model.StateOrProvinces.First().Value);
-
-            model.Districts = _districtRepository
-                .Query()
-                .Where(x => x.StateOrProvinceId == selectedStateOrProvince)
-                .OrderBy(x => x.Name)
-                .Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList();
+            if(model.StateOrProvinceId > 0)
+            {
+                model.Districts = _districtRepository
+                    .Query()
+                    .Where(x => x.StateOrProvinceId == model.StateOrProvinceId)
+                    .OrderBy(x => x.Name)
+                    .Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }).ToList();
+            }
         }
     }
 }

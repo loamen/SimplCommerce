@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SimplCommerce.Infrastructure.Data;
 using SimplCommerce.Module.Catalog.Models;
 using SimplCommerce.Module.Catalog.ViewModels;
@@ -30,7 +31,10 @@ namespace SimplCommerce.Module.Catalog.Services
                 {
                     Id = category.Id,
                     IsPublished = category.IsPublished,
-                    Name = category.Name
+                    IncludeInMenu = category.IncludeInMenu,
+                    Name = category.Name,
+                    DisplayOrder = category.DisplayOrder,
+                    ParentId = category.ParentId
                 };
 
                 var parentCategory = category.Parent;
@@ -52,10 +56,10 @@ namespace SimplCommerce.Module.Catalog.Services
             {
                 category.SeoTitle = _entityService.ToSafeSlug(category.SeoTitle, category.Id, CategoryEntityTypeId);
                 _categoryRepository.Add(category);
-                _categoryRepository.SaveChange();
+                _categoryRepository.SaveChanges();
 
                 _entityService.Add(category.Name, category.SeoTitle, category.Id, CategoryEntityTypeId);
-                _categoryRepository.SaveChange();
+                _categoryRepository.SaveChanges();
 
                 transaction.Commit();
             }
@@ -65,13 +69,14 @@ namespace SimplCommerce.Module.Catalog.Services
         {
             category.SeoTitle = _entityService.ToSafeSlug(category.SeoTitle, category.Id, CategoryEntityTypeId);
             _entityService.Update(category.Name, category.SeoTitle, category.Id, CategoryEntityTypeId);
-            _categoryRepository.SaveChange();
+            _categoryRepository.SaveChanges();
         }
 
-        public void Delete(Category category)
+        public async Task Delete(Category category)
         {
+             await _entityService.Remove(category.Id, CategoryEntityTypeId);
             _categoryRepository.Remove(category);
-            _categoryRepository.SaveChange();
+            _categoryRepository.SaveChanges();
         }
     }
 }

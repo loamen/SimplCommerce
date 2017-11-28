@@ -8,7 +8,9 @@
         'ngFileUpload',
         'ui.bootstrap',
         'ui.bootstrap.datetimepicker',
+        'ui.tree',
         'summernote',
+        'colorpicker.module',
         'simplAdmin.common',
         'simplAdmin.dashboard',
         'simplAdmin.core',
@@ -20,7 +22,12 @@
         'simplAdmin.activityLog',
         'simplAdmin.vendors',
         'simplAdmin.localization',
-        'simplAdmin.news'
+        'simplAdmin.news',
+        'simplAdmin.contacts',
+        'simplAdmin.pricing',
+        'simplAdmin.tax',
+        'simplAdmin.shippings',
+        'simplAdmin.shipping-tablerate'
     ]);
 
     toastr.options.closeButton = true;
